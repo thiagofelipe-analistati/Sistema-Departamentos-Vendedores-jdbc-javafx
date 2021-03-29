@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alerts;
@@ -32,12 +33,15 @@ public class MainViewController implements Initializable{
 	}
 	@FXML
 	public void onMenuItemDepartamento() {
-		LoadView2("/gui/DepartamentoList.fxml");
+		LoadView("/gui/DepartamentoList.fxml", (DepartamentoListController controller) -> {
+			controller.setDepartamentoService(new DepartamentoService());
+			controller.updateTableView();
+		});
 	}
 	
 	@FXML
 	public void onMenuItemAbout() {
-		LoadView("/gui/about.fxml");
+		LoadView("/gui/about.fxml", x->{});
 	}
 	
 	
@@ -49,7 +53,8 @@ public class MainViewController implements Initializable{
 		
 	}
 	//synchronized garante que não seja interrompido nada.
-	private synchronized void LoadView(String absoltename) {
+	// inclussão do acao de iniciaçlização
+	private synchronized <T> void LoadView(String absoltename, Consumer<T> acaoInicializacao ) {
 		try {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(absoltename));
 		VBox newVBox = loader.load();
@@ -63,6 +68,9 @@ public class MainViewController implements Initializable{
 		mainVBOx.getChildren().clear();
 		mainVBOx.getChildren().add(mainMenu);
 		mainVBOx.getChildren().addAll(newVBox.getChildren());
+		// função de inicialização.
+		T controller = loader.getController();
+		acaoInicializacao.accept(controller);
 		
 		} catch (IOException e) {
 			
@@ -72,29 +80,4 @@ public class MainViewController implements Initializable{
 	}
 
 
-private synchronized void LoadView2(String absoltename) {
-	try {
-	FXMLLoader loader = new FXMLLoader(getClass().getResource(absoltename));
-	VBox newVBox = loader.load();
-	
-	// referencia para a cena principal
-	Scene mainScene = Main.getMainScene();
-	//referencia para Vbox principal 
-	VBox mainVBOx =(VBox) ((ScrollPane) mainScene.getRoot()).getContent();
-	
-	Node mainMenu = mainVBOx.getChildren().get(0);
-	mainVBOx.getChildren().clear();
-	mainVBOx.getChildren().add(mainMenu);
-	mainVBOx.getChildren().addAll(newVBox.getChildren());
-	
-	DepartamentoListController controller = loader.getController();
-	controller.setDepartamentoService(new DepartamentoService());
-	controller.updateTableView();
-	
-	} catch (IOException e) {
-		
-		Alerts.showAlert("IOException", "Erro na leitura da tela ", e.getMessage(), AlertType.ERROR);
-		
-	}
-}
 }
