@@ -65,4 +65,5 @@ public class Departamento implements Serializable{
 	public String toString() {
 		return "Departamento [id=" + id + ", nome=" + nome + "]";
 	}
+
 }

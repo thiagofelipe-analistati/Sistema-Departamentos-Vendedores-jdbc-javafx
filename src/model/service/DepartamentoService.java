@@ -15,4 +15,11 @@ public class DepartamentoService {
 		return dao.FindAll();
 		
 	}
+	public void saveorUpdate (Departamento obj) {
+		if(obj.getId()== null) {
+			dao.insert(obj);
+		}else {
+			dao.update(obj);
+		}
+	}
 }

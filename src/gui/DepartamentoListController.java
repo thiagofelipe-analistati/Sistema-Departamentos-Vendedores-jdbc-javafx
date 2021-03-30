@@ -46,8 +46,10 @@ public class DepartamentoListController implements Initializable {
 	private ObservableList<Departamento> obsList;
 	
 	public void onBtNewAction(ActionEvent event){
+		
 		Stage parentStage = Utils.currentStage(event);
-		creadteDialogForm("/gui/DepartamentoForm.fxml", parentStage);
+		Departamento obj = new Departamento();
+		creadteDialogForm(obj,"/gui/DepartamentoForm.fxml", parentStage);
 	}
 	
 	@Override
@@ -79,12 +81,16 @@ public class DepartamentoListController implements Initializable {
 		tableViewDepartamento.prefHeightProperty().bind(stage.heightProperty());
 	}
 	// ação de formulário de cadastro de derpatamentos
-	private void creadteDialogForm (String absoltename, Stage parentStage) {
+	private void creadteDialogForm (Departamento obj, String absoltename, Stage parentStage) {
 		try {
 			// carregando a view de novo de partamento.
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoltename));
 			Pane pane = loader.load();
-			
+			// ler o controlador da tela
+			DepartamentoFormController controller = loader.getController();
+			controller.setDepartamento(obj);
+			controller.setDepartamentoService(new DepartamentoService());
+			controller.updateFormData();
 			//um palco na frente do palco
 			
 			Stage dialogStage = new Stage();
