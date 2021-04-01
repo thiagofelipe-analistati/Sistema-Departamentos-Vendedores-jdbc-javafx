@@ -37,7 +37,7 @@ public class DepartamentoListController implements Initializable, DataChangeList
 	
 	@FXML
 	private TableColumn<Departamento, Integer> tableColumnId;
-	
+	  
 	@FXML
 	private TableColumn<Departamento, String> tableColumnName;
 	
