@@ -2,6 +2,7 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -44,6 +45,12 @@ public class VendedorListController implements Initializable, DataChangeListener
 
 	@FXML
 	private TableColumn<Vendedor, String> tableColumnName;
+	@FXML
+	private TableColumn<Vendedor, String> tableColumnEmail;
+	@FXML
+	private TableColumn<Vendedor, Date> tableColumnbirthDate;
+	@FXML
+	private TableColumn<Vendedor, Double> tableColumnBaseSalary;
 
 	@FXML
 	private TableColumn<Vendedor, Vendedor> tableColumnEdit;
@@ -90,6 +97,11 @@ public class VendedorListController implements Initializable, DataChangeListener
 	private void inicializeNodes() {
 		tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		tableColumnName.setCellValueFactory(new PropertyValueFactory<>("Nome"));
+		tableColumnEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		tableColumnbirthDate.setCellValueFactory(new PropertyValueFactory<>("dataNasc"));
+		Utils.formatTableColumnDate(tableColumnbirthDate, "dd/MM/yyyy");
+		tableColumnBaseSalary.setCellValueFactory(new PropertyValueFactory<>("salarioBase"));
+		Utils.formatTableColumnDouble(tableColumnBaseSalary, 2);
 		// macete para tabela acompnhar a janela.
 		Stage stage = (Stage) Main.getMainScene().getWindow();
 		tableViewVendedor.prefHeightProperty().bind(stage.heightProperty());

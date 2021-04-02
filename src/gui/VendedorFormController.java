@@ -1,8 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -17,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entidades.Vendedor;
@@ -36,7 +40,19 @@ public class VendedorFormController implements Initializable {
 	@FXML 
 	private TextField txtNome;
 	@FXML 
+	private TextField txtEmail;
+	@FXML 
+	private DatePicker dpbirthDate;
+	@FXML 
+	private TextField txtBaseSalary;
+	@FXML 
 	private Label labelErroNome;
+	@FXML 
+	private Label labelErroEmail;
+	@FXML 
+	private Label labelErroBirthDate;
+	@FXML 
+	private Label labelErroBaseSalary;
 	@FXML 
 	private Button tbSave;
 	@FXML 
@@ -110,7 +126,10 @@ public class VendedorFormController implements Initializable {
 	// fazendo os restrições dos campos TEXTFIEDS
 	private void initialibleNodes() {
 		Constraints.setTextFieldInteger(txtId);
-		Constraints.setTextFieldMaxLength(txtNome, 30);
+		Constraints.setTextFieldMaxLength(txtNome, 70);
+		Constraints.setTextFieldDouble(txtBaseSalary);
+		Constraints.setTextFieldMaxLength(txtEmail, 60);
+		Utils.formatDatePicker(dpbirthDate, "dd/MM/yyyy");
 	}
 	
 	public void updateFormData () {
@@ -119,6 +138,13 @@ public class VendedorFormController implements Initializable {
 		}
 		txtId.setText(String.valueOf(entidade.getId()));
 		txtNome.setText(entidade.getNome());
+		txtEmail.setText(entidade.getEmail());
+		Locale.setDefault(Locale.US);
+		txtBaseSalary.setText(String.format("%.2f", entidade.getSalarioBase()));
+		if(entidade.getDataNasc() != null) {
+			dpbirthDate.setValue(LocalDate.ofInstant(entidade.getDataNasc().toInstant(), ZoneId.systemDefault()));
+		}
+	
 	}
 	private void setErrorMessagem(Map <String, String> erros) {
 		Set<String> fields = erros.keySet();
