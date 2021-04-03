@@ -31,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entidades.Vendedor;
+import model.service.DepartamentoService;
 import model.service.VendedorService;
 
 public class VendedorListController implements Initializable, DataChangeListener {
@@ -116,7 +117,9 @@ public class VendedorListController implements Initializable, DataChangeListener
 			// ler o controlador da tela
 			VendedorFormController controller = loader.getController();
 			controller.setVendedor(obj);
-			controller.setVendedorService(new VendedorService());
+			controller.setServices(new VendedorService(), new DepartamentoService());
+			//chamando do combobox de departamento
+			controller.LoadAssociacaoObejetos();
 			controller.subscribeDataChangeListener(this);
 			controller.updateFormData();
 			// um palco na frente do palco
