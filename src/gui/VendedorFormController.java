@@ -1,9 +1,11 @@
 package gui;
 
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -111,6 +113,24 @@ public class VendedorFormController implements Initializable {
 			excecao.addError("Nome", "O campo nomde deve ser preenchido! ");
 		}
 		obj.setNome(txtNome.getText());
+		
+		if (txtEmail.getText() == null || txtEmail.getText().trim().equals("")) {
+			excecao.addError("Email", "O campo nomde deve ser preenchido! ");
+		}
+		obj.setEmail(txtEmail.getText());
+		if(dpbirthDate.getValue()==null) {
+			excecao.addError("birthDate", "O campo nomde deve ser preenchido! ");
+		}else {
+		Instant instant = Instant.from(dpbirthDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+		obj.setDataNasc(Date.from(instant));
+		}
+		if (txtBaseSalary.getText() == null || txtBaseSalary.getText().trim().equals("")) {
+			excecao.addError("baseSalary", "O campo nomde deve ser preenchido! ");
+		}
+		obj.setSalarioBase(Utils.tryParseToDouble(txtBaseSalary.getText()));
+		
+		obj.setDepartamento(comboBoxDepartamento.getValue());
+		
 		if (excecao.getErros().size() > 0) {
 			throw excecao;
 		}
@@ -181,9 +201,24 @@ public class VendedorFormController implements Initializable {
 
 	private void setErrorMessagem(Map<String, String> erros) {
 		Set<String> fields = erros.keySet();
-		if (fields.contains("Nome")) {
+		
+		labelErroNome.setText(fields.contains("Nome") ? erros.get("Nome") : "" );
+		labelErroEmail.setText(fields.contains("Email") ? erros.get("Email") : "" );
+		labelErroBaseSalary.setText(fields.contains("baseSalary") ? erros.get("baseSalary") : "" );
+		labelErroBirthDate.setText(fields.contains("birthDate") ? erros.get("birthDate") : "" );
+		/*if (fields.contains("Nome")) {
 			labelErroNome.setText(erros.get("Nome"));
 		}
+		if (fields.contains("Email")) {
+			labelErroEmail.setText(erros.get("Email"));
+		}
+		if (fields.contains("baseSalary")) {
+			labelErroBaseSalary.setText(erros.get("baseSalary"));
+		}
+		if (fields.contains("birthDate")) {
+			labelErroBirthDate.setText(erros.get("birthDate"));
+		}*/
+		
 	}
 
 	private void initializeComboBoxDepartment() {

@@ -134,6 +134,7 @@ public class VendedorListController implements Initializable, DataChangeListener
 			dialogStage.showAndWait();
 
 		} catch (IOException e) {
+			e.printStackTrace();
 			Alerts.showAlert("IOException", "Erro londging View", e.getMessage(), AlertType.ERROR);
 		}
 	}
